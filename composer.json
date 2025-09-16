@@ -1,0 +1,45 @@
+{
+	"name": "starburst/encrypted-config-loader",
+	"description": "Expanded config loader for stefna/config",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Andreas Sundqvist",
+			"email": "andreas@stefna.is"
+		}
+	],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": "^8.2",
+		"psr/container": "^2.0",
+		"stefna/config": "^1.0",
+		"paragonie/halite": "^5"
+	},
+	"require-dev": {
+		"circli/console": "^1.0",
+		"squizlabs/php_codesniffer": "^3.0",
+		"stefna/codestyle": "^1.15",
+		"phpstan/phpstan": "^2.0",
+		"bnf/phpstan-psr-container": "^1.0",
+		"phpunit/phpunit": "^11.0",
+		"phpstan/phpstan-phpunit": "^2.0",
+		"phpstan/extension-installer": "^1.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Starburst\\EncryptedConfigLoader\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Starburst\\EncryptedConfigLoader\\Tests\\": "tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
+	}
+}
