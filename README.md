@@ -12,6 +12,15 @@ PHP 8.2 or higher.
 composer require starburst/encrypted-config-loader
 ```
 
+## Setup cli commands
+
+The package provides 4 cli commands that can be used to make it easier to work with the secrets.
+
+* `config:decrypt`
+* `config:encrypt`
+* `config:generate-secret`
+* `config:rotate-secrets`
+
 ### Setup in starburst
 
 It's on purpose that we don't provide a default `Bootloader` for these since most project should add their own logic
@@ -38,7 +47,6 @@ class EncryptionConfigCliBootloader implements
 			),
 		]);
 	}
-
 }
 
 ```
@@ -50,3 +58,4 @@ We are always happy to receive bug/security reports and bug/security fixes
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
