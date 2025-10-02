@@ -20,7 +20,7 @@ final class DefaultCryptoHelper implements CryptoHelper
 	 * @param array<mixed> $config
 	 * @return array<mixed>
 	 */
-	public function decryptConfig(array $config, bool $root = true): array
+	public function decryptConfig(array $config, bool $root = true, bool $raw = false): array
 	{
 		if ($root) {
 			if (
@@ -32,11 +32,15 @@ final class DefaultCryptoHelper implements CryptoHelper
 		}
 		foreach ($config as &$value) {
 			if ($value instanceof EncryptedValue) {
-				$value = $this->crypto->decrypt($value->toString());
+				$decryptedValue = $this->crypto->decrypt($value->toString());
+				if ($raw) {
+					$decryptedValue = $decryptedValue->toString();
+				}
+				$value = $decryptedValue;
 				continue;
 			}
 			if (is_array($value)) {
-				$value = $this->decryptConfig($value, false);
+				$value = $this->decryptConfig($value, false, $raw);
 			}
 		}
 
