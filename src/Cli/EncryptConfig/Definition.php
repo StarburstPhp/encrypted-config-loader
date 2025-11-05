@@ -11,6 +11,7 @@ use Starburst\EncryptedConfigLoader\KeyResolver;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 final class Definition extends BaseDefinition
 {
@@ -39,7 +40,7 @@ final class Definition extends BaseDefinition
 		);
 	}
 
-	public function transformInput(InputInterface $input): InputInterface
+	public function transformInput(InputInterface $input, OutputInterface $output): InputInterface
 	{
 		/** @var null|string $keyInput */
 		$keyInput = $input->getOption('key');

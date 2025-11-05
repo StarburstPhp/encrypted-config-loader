@@ -18,7 +18,7 @@
 		"paragonie/halite": "^5"
 	},
 	"require-dev": {
-		"circli/console": "^1.0",
+		"circli/console": "^2.0",
 		"squizlabs/php_codesniffer": "^3.0",
 		"stefna/codestyle": "^1.15",
 		"phpstan/phpstan": "^2.0",

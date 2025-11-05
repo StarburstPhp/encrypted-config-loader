@@ -9,6 +9,7 @@ use Starburst\EncryptedConfigLoader\FileKeyResolver;
 use Starburst\EncryptedConfigLoader\KeyResolver;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 final class Definition extends \Circli\Console\Definition
 {
@@ -40,7 +41,7 @@ final class Definition extends \Circli\Console\Definition
 		);
 	}
 
-	public function transformInput(InputInterface $input): InputInterface
+	public function transformInput(InputInterface $input, OutputInterface $output): InputInterface
 	{
 		/** @var string $newKeyInput */
 		$newKeyInput = $input->getArgument('newKey');
