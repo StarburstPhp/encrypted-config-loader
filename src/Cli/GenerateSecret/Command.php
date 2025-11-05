@@ -21,7 +21,7 @@ final class Command extends \Circli\Console\Definition
 			$key = KeyFactory::export(KeyFactory::generateEncryptionKey());
 
 			if ($input->getOption('raw')) {
-				$output->writeln(sprintf('%s', $key->getString()));
+				$output->write(sprintf('%s', $key->getString()));
 				return 0;
 			}
 
