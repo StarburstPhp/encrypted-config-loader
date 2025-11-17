@@ -63,4 +63,31 @@ final class EncryptedConfig implements Config
 		}
 		return $value;
 	}
+
+	public function getArray(string $key, array $default = []): array
+	{
+		$value = $this->getRawValue($key) ?? $default;
+		if (!is_array($value)) {
+			return $default;
+		}
+
+		return $this->resolveArray($value);
+	}
+
+	/**
+	 * @param array<mixed> $values
+	 * @return array<mixed>
+	 */
+	private function resolveArray(array $values): array
+	{
+		foreach ($values as $k => $v) {
+			if (is_array($v)) {
+				$values[$k] = $this->resolveArray($v);
+			}
+			else {
+				$values[$k] = $this->resolveValue($v, $k);
+			}
+		}
+		return $values;
+	}
 }
