@@ -116,7 +116,6 @@ final class EncryptedConfigTest extends TestCase
 
 	public function testKeyCollectionReturningNewestKeyIfConfigIsMissingMetaData(): void
 	{
-
 		$keyCollection = new KeyCollection(
 			$this->loadKey(self::KEY_1),
 			$this->loadKey(self::KEY_2),
@@ -152,5 +151,43 @@ final class EncryptedConfigTest extends TestCase
 		$this->assertSame('New Secret value', $config->getString('nested.random.new-key'));
 		$this->assertSame('Secret value', $config->getString('secret'));
 		$this->assertSame(42, $config->getInt('override'));
+	}
+
+	public function testGetArrayForChainConfigActuallyReturnsADecryptedArray(): void
+	{
+		$keyCollection = new KeyCollection(
+			$this->loadKey(self::KEY_1),
+			$this->loadKey(self::KEY_2),
+		);
+		$crypto = $this->getCrypto()->withKey($keyCollection);
+		$rawConfig1 = [
+			'nested' => [
+				'random' => [
+					'new-key' => new \Starburst\EncryptedConfigLoader\Values\EncryptedValue('MUIFAArDaF_wsQ9a435CvelFIkFFZJDPuOLEZpIO9lyLCV-k05wCYTAlJX1InTNXhXJ8g5Zl_ERAfx2Sd1__Y0-aL47n-Mx_RM89GGm9J3HzObYyB4XLpMEywYKY6V9VhugLEe0x2FpghQixRi2CZCfMMNPcsMLM_1ASiK5-rWfEouY4e3wBDMSa0-0='),
+				],
+			],
+		];
+		$rawConfig2 = [
+			'override' => 42,
+			'secret' => new \Starburst\EncryptedConfigLoader\Values\EncryptedValue('MUIFABIrEuQeF97ULjnCoFZB2mcpgDOmc-mV2IHtR87TiH5oZywGIBXyi6epyN1DSIqaURhhsMfXVxzS4O_qLTYDHGkk2ehTfG4B9bTDR_TtszWxy6hh-ExmdNOxWKy_IEydevhm3cK4eAoj1IPBKejam8-pZaj-iSuF6DiPPsh_dtzZhTuMLg=='),
+			'nested' => [
+				'random' => [
+					'secret1' => new \Starburst\EncryptedConfigLoader\Values\EncryptedValue('MUIFAMCAHYllJ7gVcCGyuv8Qom7azz7toGGpFlnMQix4d5iPTSxGnAoVWA5r0nFhxIiYv2ZKgdWRG4AEkwg8dRVGOjln2ATn0c1gfJW33MX21j6Z7x4VK2dBbc3k6MlccveOa5weiHF4oYw8AygmAOxx07yVHQFSpjOjoLqVQT9JiNqninRv3A=='),
+				],
+			],
+			'__CRYPTO_META' => [
+				'tenant' => '3019f12a-cb55-4362-8cd5-b7efb7aec3f2',
+				'__KEY_VERSION' => 'MUIFABhtMPMgSqmy_obWV0lmfPdzCA5PTrRurvlQED9vPa4sc7AIqBHlmHNg2RVOZG7Uc9uwLuEuMSZvBFPUoksTg33qZXObcTd8EOZoW-_-4LzPwg6NPjTIkUEEVTtzbIOL4CsI_tg3dIhI1HKgi2jUE5mc_REyA3SEnAg=',
+			],
+		];
+
+		$config = new ChainConfig(
+			new EncryptedConfig($rawConfig1, $crypto),
+			new EncryptedConfig($rawConfig2, $crypto),
+		);
+
+		$arrayConfig = $config->getArray('nested.random');
+		$this->assertArrayHasKey('new-key', $arrayConfig);
+		$this->assertSame('New Secret value', $arrayConfig['new-key']);
 	}
 }

@@ -33,6 +33,9 @@ final class EncryptedConfig implements Config
 	public function getRawValue(string $key): mixed
 	{
 		if (isset($this->config[$key])) {
+			if (is_array($this->config[$key])) {
+				return $this->resolveArray($this->config[$key]);
+			}
 			return $this->resolveValue($this->config[$key], $key);
 		}
 		if (!str_contains($key, '.')) {
@@ -45,6 +48,9 @@ final class EncryptedConfig implements Config
 				return null;
 			}
 			$root = $root[$searchKey];
+		}
+		if (is_array($root)) {
+			return $this->resolveArray($root);
 		}
 		return $this->resolveValue($root, $key);
 	}
