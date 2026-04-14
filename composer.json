@@ -14,7 +14,7 @@
 	"require": {
 		"php": "^8.2",
 		"psr/container": "^2.0",
-		"stefna/config": "^1.0",
+		"stefna/config": "^1.4",
 		"paragonie/halite": "^5"
 	},
 	"require-dev": {
