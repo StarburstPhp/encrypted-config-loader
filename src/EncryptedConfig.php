@@ -34,7 +34,7 @@ final class EncryptedConfig implements Config
 	{
 		if (isset($this->config[$key])) {
 			if (is_array($this->config[$key])) {
-				return $this->resolveArray($this->config[$key]);
+				return $this->resolveArray($this->config[$key], $key);
 			}
 			return $this->resolveValue($this->config[$key], $key);
 		}
@@ -50,7 +50,7 @@ final class EncryptedConfig implements Config
 			$root = $root[$searchKey];
 		}
 		if (is_array($root)) {
-			return $this->resolveArray($root);
+			return $this->resolveArray($root, $key);
 		}
 		return $this->resolveValue($root, $key);
 	}
@@ -77,21 +77,21 @@ final class EncryptedConfig implements Config
 			return $default;
 		}
 
-		return $this->resolveArray($value);
+		return $this->resolveArray($value, $key);
 	}
 
 	/**
 	 * @param array<mixed> $values
 	 * @return array<mixed>
 	 */
-	private function resolveArray(array $values): array
+	private function resolveArray(array $values, string $rootKey): array
 	{
 		foreach ($values as $k => $v) {
 			if (is_array($v)) {
-				$values[$k] = $this->resolveArray($v);
+				$values[$k] = $this->resolveArray($v, $rootKey . '.' . $k);
 			}
 			else {
-				$values[$k] = $this->resolveValue($v, $k);
+				$values[$k] = $this->resolveValue($v, $rootKey . '.' . $k);
 			}
 		}
 		return $values;

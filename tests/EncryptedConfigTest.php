@@ -190,4 +190,22 @@ final class EncryptedConfigTest extends TestCase
 		$this->assertArrayHasKey('new-key', $arrayConfig);
 		$this->assertSame('New Secret value', $arrayConfig['new-key']);
 	}
+
+	public function testEncryptionCacheIsntLeaking(): void
+	{
+		$rawConfig = [
+			'sub1' => [
+				'key' => new EncryptedValue('MUIFAP4fiMzL5n1ew-HT-gEJzO57msg2-5xX5xSWK2buw3weJhSlmEA5plE51GXVqBODSHoANNupmsKxFgVzNN2Pv9c8APsilvJxH8ZUdxZDKaqR8ugXaZphM9aiUvQC2U2B2CzYDSmRr3q8wQqOp725YMvkugsBdayHLQ7FXeR3'),
+			],
+			'sub2' => [
+				'sub22' => [
+					'key' => new EncryptedValue('MUIFADHa7O82au-WN2Th4SeVcHVFQebZqwkSvGOJNAX4jZgnh1oQdWdalR9Aru2G9Qb7m6Wxnl6v7SCUii99MEvF9n8XW4JsXcOzVfHQrTr4usdzuNZP-HgtTF4XPiKh5a2F_B-0N3TZ223zrEhdjnpZDOZl55YJQgNQ8MZ5KLWC'),
+				],
+			],
+		];
+		$config = new EncryptedConfig($rawConfig, $this->getCrypto());
+
+		$this->assertSame('test2', $config->get('sub2.sub22')['key']);
+		$this->assertSame('test1', $config->get('sub1')['key']);
+	}
 }
